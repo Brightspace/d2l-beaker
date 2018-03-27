@@ -1,0 +1,17 @@
+{
+  "extends": "brightspace/node-config",
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "globals": {
+    "window": false,
+    "document": false,
+    "PerformanceObserver": false,
+    "Polymer": false,
+    "ttiPolyfill": false
+  }
+}

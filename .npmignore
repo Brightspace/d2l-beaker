@@ -1,0 +1,7 @@
+data
+node_modules
+.editorconfig
+.eslintrc.json
+.gitignore
+.npmignore
+.travis.yml
