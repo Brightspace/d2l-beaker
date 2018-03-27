@@ -49,7 +49,7 @@ Once this configuration has been defined, `d2l-beaker` can go to task by running
 measure --configjs perf.config.js
 ```
 
-It will produce some JSON that looks like...
+It will produce some JSON that summarizes the samples taken for each target - the std. mean (95%).  All measurements are reported in milliseconds.
 
 ```json
 {
@@ -57,6 +57,7 @@ It will produce some JSON that looks like...
   "target-site":"https://yourapp.com",
   "target-url":"/some-relative-url-1",
   "target-name":"target1",
+  "browser":"Chrome/67.0.3372.0",
   "caching":true,
   "timestamp":"2018-03-23 15:47:56.182",
   "properties":[
