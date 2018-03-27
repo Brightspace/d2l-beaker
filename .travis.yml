@@ -2,3 +2,12 @@ language: node_js
 node_js: node
 script:
 - npm test
+deploy:
+  provider: npm
+  email: d2ltravisdeploy@d2l.com
+  api_key:
+    secure: aAMCIWl5kOdAu/feotPRKx/evKCAYNb9bTMhD2CCymyp2dMzUhsrLA3LiGPfPAmXvHi7kqGk3zAF6NKJfrlkSGmBd0lyCUSGUscDR55LXBno60za/znVy/7YsPmf4PLqdtIsTWOGwx6rnmdeEhuDiuBG5bINW0T0Is3DMEhXqbZCX8+aLxWpb+7cbxqAzPT2TxDS3YX876Af9T/kU22J6gb3odcEQiY2pGIhm8eeJrTutiCikXqvQWEPzH2tp0HSBe+2cHGcxmsL0aJnWDjXs68r4uo7dIFcy4oYVTAqwph94LYC+QIdknx6TQ7xOtIQLyZRI9PcpQRwDya4s0XkQbYzoUdW0RTwSt2gh1VYJ3UmzQP7OQ8gjKQnT63JR/UniEa/O3mx2PEzKIMGmQMwR+JyXMqlAq2gbbQGFnWSZYd6W9YyiSu/8vH23yH1xRLbBPX14t4mo/cf6EIOcdDcBM7jCmD01TKWWwHv5eopDaNhThSsjfm3/qqJ4kc2fZLMC+MsmACfNcJnBlrxhB8pW1APtfb8F8AIiqtn/EdgmcHd5zHmhUmUf7CzladpK5NRY5DR8t6ANhZFjAFHOjV9JYL0DVPCs/6gIKYoRziu7aYCBdo+pHxRTxIuM66NWf297MqgThDtt0jYYoSCLrL8WyA7a53X3FSA1H7pQgbRuMc=
+  on:
+    tags: true
+    repo: Brightspace/d2l-beaker
+    all_branches: true
