@@ -121,13 +121,20 @@ module.exports = {
 
 ### Custom Measurements
 
-Need to extract your own measurements?  No problem, as long as your custom measurement is taken using the [standard measure API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure) it will be extracted and recorded.  
+Need to extract your own measurements?  No problem, as long as your custom measurement is taken using the [standard measure API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure) it will be extracted and recorded. It is also possible to specify measurements to be gathered per-target.
 
 Note: if your measurement name ends with a `*`, the extractor will look for any measures that match, but it won't wait for them beyond page load. If there is a specific measure that may be delayed, list is explicitly.
 
 ```js
 module.exports = {
-  "measurements": ["yourapp.some-measure", "yourapp.*"]
+  "measurements": ["some-measure", "yourapp.*"],
+  "target": {
+    "targets": [
+      {"name": "target1", "url": "/some-relative-url-1", "measurements": ["some-other-measure"]},
+      {"name": "target2", "url": "/some-relative-url-2"},
+      {"name": "target3", "url": "/some-relative-url-3"}
+    ]
+  }
 };
 ```
 
