@@ -25,7 +25,7 @@ module.exports = {
   "headless": false,
   "samplesPerTarget": 10,
   "measurements": ["first-paint", "first-contentful-paint"],
-  "properties": ["polymer"],
+  "properties": [],
   "target": {
     "site": "https://yourapp.com",
     "login": {
@@ -119,7 +119,7 @@ module.exports = {
 };
 ```
 
-### Custom Measurements
+### More Measurements
 
 Need to extract your own measurements?  No problem, as long as your custom measurement is taken using the [standard measure API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure) it will be extracted and recorded. It is also possible to specify measurements to be gathered per-target.
 
@@ -138,9 +138,11 @@ module.exports = {
 };
 ```
 
-### Custom Properties
+### Properties
 
-Need to extract properties (besides the built-in ones) to go with your data? Custom properties providers can be specified as shown below, and the value will be included in the output properties. The provider may be `async` if needed.
+`d2l-beaker` supports extracting properties along with its measurements. There are a couple of built-in properties that can be extracted - specifically the `app-version` (from HTML data attribute), and `polymer` (version from JS).
+
+Need to extract properties (besides the built-in ones) to go with your data? Custom property providers can also be specified, and the value will be included in the output JSON. The provider may be `async` if needed.
 
 ```js
 module.exports = {
