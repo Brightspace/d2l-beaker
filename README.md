@@ -60,9 +60,7 @@ It will produce some JSON that summarizes the samples taken for each target - th
   "browser":"Chrome/67.0.3372.0",
   "caching":true,
   "timestamp":"2018-03-23 15:47:56.182",
-  "properties":[
-    {"name":"polymer","value":"2.5.0"}
-  ],
+  "properties":[],
   "measurements":[
     {"name":"first-paint","value":940},
     {"name":"first-contentful-paint","value":940}
@@ -142,7 +140,7 @@ module.exports = {
 
 `d2l-beaker` supports extracting properties along with its measurements. There are a couple of built-in properties that can be extracted - specifically the `app-version` (from HTML data attribute), and `polymer` (version from JS).
 
-Need to extract properties (besides the built-in ones) to go with your data? Custom property providers can also be specified, and the value will be included in the output JSON. The provider may be `async` if needed.
+Need to extract properties (besides the built-in ones) to go with your data? The provider may be `async` if needed.
 
 ```js
 module.exports = {
@@ -153,6 +151,30 @@ module.exports = {
   ]
 };
 ```
+
+The extracted properties will be included in the JSON output.
+
+```json
+{
+  "application-key":"your-app",
+  "target-site":"https://yourapp.com",
+  "target-url":"/some-relative-url-1",
+  "target-name":"target1",
+  "browser":"Chrome/67.0.3372.0",
+  "caching":true,
+  "timestamp":"2018-03-23 15:47:56.182",
+  "properties":[
+    {"name":"app-version","value":"10.8.1"},
+    {"name":"polymer","value":"2.5.0"},
+    {"name":"some-other-version","value":"some-value"}
+  ],
+  "measurements":[
+    {"name":"first-paint","value":940},
+    {"name":"first-contentful-paint","value":940}
+  ]
+}
+```
+
 
 ### Upload
 
