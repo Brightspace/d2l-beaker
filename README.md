@@ -78,7 +78,7 @@ The CLI supports a number of options to enable re-using configuration, or to avo
 measure --user some-user --pwd some-password --configjs perf.config.js
 ```
 
-* `--configjs`          Configuration JS module ('''required''')
+* `--configjs`          Configuration JS module (**required**)
 * `--applicationKey`    Key for application
 * `--caching`           Whether to enable caching
 * `--headless`          Whether to run headless
@@ -179,7 +179,7 @@ module.exports = {
 };
 ```
 
-'''Note: keep your secret keys secret!'''
+**Note: keep your secret keys secret!**
 
 ## Contributing
 
