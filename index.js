@@ -42,7 +42,7 @@ const filePath = `${folderPath}/${fileName}`;
 
 	for (let i = 0; i < config.target.targets.length; i++) {
 
-		let result = await measure(page, config.target.site + config.target.targets[i].url, config.measurements, config);
+		let result = await measure(page, config.target.targets[i], config);
 
 		result = {...{
 			'application-key': config.applicationKey,
