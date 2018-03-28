@@ -19,15 +19,6 @@ const helper = {
 			+ (minutes < 10 ? '0' + minutes : minutes) + timeDelim
 			+ (seconds < 10 ? '0' + seconds : seconds) + '.'
 			+ milliseconds;
-	},
-
-	merge: (objA, objB) => {
-		for (const key in objB) {
-			if (objB.hasOwnProperty(key)) {
-				objA[key] = objB[key];
-			}
-		}
-		return objA;
 	}
 
 };

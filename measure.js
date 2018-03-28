@@ -89,7 +89,7 @@ const getMeasurements = async(page, keys) => {
 				continue;
 			}
 			if (typeof value === 'object') {
-				measurements = helpers.merge(measurements, value);
+				measurements = {...measurements, ...value};
 			} else {
 				measurements[providers[i].key] = value;
 			}

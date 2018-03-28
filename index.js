@@ -44,14 +44,14 @@ const filePath = `${folderPath}/${fileName}`;
 
 		let result = await measure(page, config.target.site + config.target.targets[i].url, config.measurements, config);
 
-		result = helpers.merge({
+		result = {...{
 			'application-key': config.applicationKey,
 			'target-site': config.target.site,
 			'target-url': config.target.targets[i].url,
 			'target-name': config.target.targets[i].name,
 			'properties': await getProperties(page, config.target.site + config.target.targets[i].url, config.properties, config),
 			'browser': browserVersion
-		}, result);
+		}, ...result};
 
 		result.measurements = processor.evaluate(result.measurements);
 		fs.appendFileSync(filePath, JSON.stringify(result) + '\n');
