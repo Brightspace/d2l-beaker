@@ -77,9 +77,8 @@ const getProviders = (keys) => {
 	return providers;
 };
 
-const getMeasurements = async(page, keys) => {
+const getMeasurements = async(page, providers) => {
 
-	const providers = getProviders(keys);
 	let measurements = {};
 
 	if (providers && providers.length > 0) {
@@ -100,7 +99,18 @@ const getMeasurements = async(page, keys) => {
 
 };
 
-const measure = async(page, url, keys, config) => {
+const measure = async(page, targetConfig, config) => {
+
+	const url = config.target.site + targetConfig.url;
+
+	let keys = config.measurements;
+	if (targetConfig.measurements && targetConfig.measurements.length > 0) {
+		if (keys && keys.length > 0) {
+			keys = [...keys, ...targetConfig.measurements];
+		} else {
+			keys = targetConfig.measurements;
+		}
+	}
 
 	let measuringLogged = false;
 	let ignoreMeasurement = config.caching;
@@ -110,6 +120,8 @@ const measure = async(page, url, keys, config) => {
 		timestamp: helpers.getTimestamp(),
 		measurements: []
 	};
+
+	const providers = getProviders(keys);
 
 	while (result.measurements.length <= config.samplesPerTarget - 1) {
 
@@ -133,7 +145,7 @@ const measure = async(page, url, keys, config) => {
 
 			process.stdout.write('.');
 
-			result.measurements.push(await getMeasurements(page, keys));
+			result.measurements.push(await getMeasurements(page, providers));
 
 		}
 	}
