@@ -14,8 +14,8 @@ const uploadHelper = {
 
 			const s3 = new AWS.S3({
 				apiVersion: 'latest',
-				accessKeyId: config.creds.accessKeyId || process.env[config.creds.accessKeyIdVar],
-				secretAccessKey: config.creds.secretAccessKey || process.env[config.creds.secretAccessKeyVar],
+				accessKeyId: config.creds.accessKeyId,
+				secretAccessKey: config.creds.secretAccessKey,
 				region: config.region
 			});
 

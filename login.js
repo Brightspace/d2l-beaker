@@ -6,8 +6,8 @@ const loginHelper = {
 	login: async(page, config) => {
 		process.stdout.write('\nLogging in... ');
 
-		const user = config.user.value || process.env[config.user.envVar];
-		const password = config.password.value || process.env[config.password.envVar];
+		const user = config.user.value;
+		const password = config.password.value;
 
 		await page.type(config.user.selector, user);
 		await page.type(config.password.selector, password);

@@ -109,8 +109,8 @@ module.exports = {
   "target": {
     "login": {
       "url": "/login",
-      "user": {"selector": "#userName", "envVar": "TEST-USER-VAR"},
-      "password": {"selector": "#password", "envVar": "TEST-PASSWORD-VAR"},
+      "user": {"selector": "#userName", "value": "{{TEST-USER-VAR}}"},
+      "password": {"selector": "#password", "value": "{{TEST-PASSWORD-VAR}}"},
       "submit": {"selector": "#loginButton"}
     }
   }
@@ -203,8 +203,8 @@ module.exports = {
     "target": "some.bucket/some-folder",
     "region": "us-east-1",
     "creds": {
-      "accessKeyIdVar": "SOME-ID-VAR",
-      "secretAccessKeyVar": "SOME-SECRET-KEY-VAR"
+      "accessKeyId": "{{SOME-ID-VAR}}",
+      "secretAccessKey": "{{SOME-SECRET-KEY-VAR}}"
     }
   }
 };

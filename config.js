@@ -11,8 +11,8 @@ const configHelper = {
 			site: null,
 			login: {
 				url: null,
-				user: {selector: null, envVar: null, value: null},
-				password: {selector: null, envVar: null, value: null},
+				user: {selector: null, value: null},
+				password: {selector: null, value: null},
 				submit: {selector: null}
 			},
 			targets: []
@@ -23,9 +23,7 @@ const configHelper = {
 			region: 'us-east-1',
 			creds: {
 				accessKeyId: null,
-				accessKeyIdVar: null,
-				secretAccessKey: null,
-				secretAccessKeyVar: null
+				secretAccessKey: null
 			}
 		}
 	},
@@ -39,7 +37,34 @@ const configHelper = {
 		if (argv.targetSite) resolved.target.site = argv.targetSite;
 		if (argv.user) resolved.target.login.user.value = argv.user;
 		if (argv.pwd) resolved.target.login.password.value = argv.pwd;
-		return resolved;
+
+		const resolveValues = (obj) => {
+			for (const key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					const typeOfValue = typeof obj[key];
+					if (typeOfValue === 'string') {
+						let resolvedValue = configHelper.resolveConfigValue(obj[key]);
+						if (key === 'samplesPerTarget') resolvedValue = parseInt(resolvedValue);
+						if (key === 'caching') resolvedValue = (resolvedValue.toLowerCase() === 'true');
+						if (key === 'headless') resolvedValue = (resolvedValue.toLowerCase() === 'true');
+						obj[key] = resolvedValue;
+					} else if (typeOfValue === 'object') {
+						resolveValues(obj[key]);
+					}
+				}
+			}
+			return obj;
+		};
+
+		return resolveValues(resolved);
+	},
+
+	resolveConfigValue: (value) => {
+		if (value.startsWith('{{') && value.endsWith('}}')) {
+			const valueVar = value.substr(2, value.length - 4);
+			return process.env[valueVar];
+		}
+		return value;
 	}
 
 };
