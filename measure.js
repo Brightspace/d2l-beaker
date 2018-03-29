@@ -99,7 +99,7 @@ const getMeasurements = async(page, providers) => {
 
 };
 
-const measure = async(page, targetConfig, config) => {
+const measure = async(page, caching, targetConfig, config) => {
 
 	const url = config.target.site + targetConfig.url;
 
@@ -113,10 +113,10 @@ const measure = async(page, targetConfig, config) => {
 	}
 
 	let measuringLogged = false;
-	let ignoreMeasurement = config.caching;
+	let ignoreMeasurement = caching;
 
 	const result = {
-		caching: config.caching,
+		caching: caching,
 		timestamp: helpers.getTimestamp(),
 		measurements: []
 	};
@@ -134,7 +134,7 @@ const measure = async(page, targetConfig, config) => {
 		} else {
 
 			if (!measuringLogged) {
-				process.stdout.write(`Measuring... ${chalk.blue(url)}\n`);
+				process.stdout.write(`Measuring... ${chalk.blue(url)}; caching: ${caching}\n`);
 				measuringLogged = true;
 			}
 

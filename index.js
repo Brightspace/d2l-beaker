@@ -34,28 +34,38 @@ const filePath = `${folderPath}/${fileName}`;
 	process.stdout.write('\nLaunching browser... ');
 	const browser = await puppeteer.launch({headless: config.headless});
 	const page = await browser.newPage();
-	await page.setCacheEnabled(config.caching);
 	await page.setViewport({width: 1024, height: 768});
 
 	const browserVersion = await browser.version();
 	process.stdout.write(browserVersion);
 
-	for (let i = 0; i < config.target.targets.length; i++) {
+	const makeMeasurements = async(caching) => {
+		await page.setCacheEnabled(caching);
 
-		let result = await measure(page, config.target.targets[i], config);
+		for (let i = 0; i < config.target.targets.length; i++) {
 
-		result = {...{
-			'application-key': config.applicationKey,
-			'target-site': config.target.site,
-			'target-url': config.target.targets[i].url,
-			'target-name': config.target.targets[i].name,
-			'properties': await getProperties(page, config.target.site + config.target.targets[i].url, config.properties, config),
-			'browser': browserVersion
-		}, ...result};
+			let result = await measure(page, caching, config.target.targets[i], config);
 
-		result.measurements = processor.evaluate(result.measurements);
-		fs.appendFileSync(filePath, JSON.stringify(result) + '\n');
+			result = {...{
+				'application-key': config.applicationKey,
+				'target-site': config.target.site,
+				'target-url': config.target.targets[i].url,
+				'target-name': config.target.targets[i].name,
+				'properties': await getProperties(page, config.target.site + config.target.targets[i].url, config.properties, config),
+				'browser': browserVersion
+			}, ...result};
 
+			result.measurements = processor.evaluate(result.measurements);
+			fs.appendFileSync(filePath, JSON.stringify(result) + '\n');
+
+		}
+	};
+
+	if (config.caching === 'both') {
+		await makeMeasurements(false);
+		await makeMeasurements(true);
+	} else {
+		await makeMeasurements(config.caching);
 	}
 
 	let uploadHandler;
