@@ -9,8 +9,8 @@ module.exports = {
 		site: 'https://polymertest.devlms.brightspace.com',
 		login: {
 			url: '/d2l/login',
-			user: {selector: '#userName', envVar: 'D2LUSER'},
-			password: {selector: '#password', envVar: 'D2LPWD'},
+			user: {selector: '#userName', value: '{{D2LUSER}}'},
+			password: {selector: '#password', value: '{{D2LPWD}}'},
 			submit: {selector: '.d2l-button[primary]'}
 		},
 		targets: [
@@ -24,8 +24,8 @@ module.exports = {
 		target: 'performance.somebucket/measurements',
 		region: 'us-east-1',
 		creds: {
-			accessKeyIdVar: 'SOMEID',
-			secretAccessKeyVar: 'SOMEKEY'
+			accessKeyId: '{{SOMEID}}',
+			secretAccessKey: '{{SOMEKEY}}'
 		}
 	}
 };
