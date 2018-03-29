@@ -45,7 +45,7 @@ const configHelper = {
 					if (typeOfValue === 'string') {
 						let resolvedValue = configHelper.resolveConfigValue(obj[key]);
 						if (key === 'samplesPerTarget') resolvedValue = parseInt(resolvedValue);
-						if (key === 'caching') resolvedValue = (resolvedValue.toLowerCase() === 'true');
+						if (key === 'caching' && resolvedValue !== 'both') resolvedValue = (resolvedValue.toLowerCase() === 'true');
 						if (key === 'headless') resolvedValue = (resolvedValue.toLowerCase() === 'true');
 						obj[key] = resolvedValue;
 					} else if (typeOfValue === 'object') {
