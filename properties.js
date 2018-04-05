@@ -16,7 +16,7 @@ const getProperty = async(page, url, provider, config) => {
 		if (login.isLoginPage(page.url(), config.target.login)) {
 			if (!await login.login(page, config.target.login)) {
 				process.exit(1);
-			};
+			}
 			await page.goto(url, {waitUntil: ['networkidle2', 'load']});
 		}
 	}
