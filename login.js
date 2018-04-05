@@ -16,7 +16,14 @@ const loginHelper = {
 			page.waitForNavigation({waitUntil: 'networkidle2'})
 		]);
 
-		process.stdout.write(chalk.green('success!\n\n'));
+		if (!loginHelper.isLoginPage(page.url(), config)) {
+			process.stdout.write(chalk.green('success!\n\n'));
+			return true;
+		} else {
+			process.stdout.write(chalk.red('failed!\n\n'));
+			return false;
+		}
+
 	},
 
 	isLoginPage: (url, config) => {
