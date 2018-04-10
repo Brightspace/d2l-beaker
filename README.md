@@ -49,7 +49,7 @@ Once this configuration has been defined, `d2l-beaker` can go to task by running
 measure --configjs perf.config.js
 ```
 
-It will produce some JSON that summarizes the samples taken for each target - the std. mean (95%).  All measurements are reported in milliseconds.
+It will produce some JSON that summarizes the samples taken for each target - the std. mean (95%).  All measurements are reported in milliseconds as per [PerformanceEntry](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry).
 
 ```json
 {
@@ -62,8 +62,8 @@ It will produce some JSON that summarizes the samples taken for each target - th
   "timestamp":"2018-03-23 15:47:56.182",
   "properties":[],
   "measurements":[
-    {"name":"first-paint","value":940},
-    {"name":"first-contentful-paint","value":940}
+    {"name":"first-paint","entryType":"paint","startTime":0,"duration":940},
+    {"name":"first-contentful-paint","entryType":"paint","startTime":0,"duration":940}
   ]
 }
 ```
@@ -119,9 +119,9 @@ module.exports = {
 
 ### More Measurements
 
-Need to extract your own measurements?  No problem, as long as your custom measurement is taken using the [standard measure API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure) it will be extracted and recorded. It is also possible to specify measurements to be gathered per-target.
+Need to extract different measurements?  No problem, as long it's a mark, paint, or measure entry available via the [browser performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntries), it can be extracted and recorded. It is also possible to specify measurements to be gathered per-target.
 
-Note: if your measurement name ends with a `*`, the extractor will look for any measures that match, but it won't wait for them beyond page load. If there is a specific measure that may be delayed, list is explicitly.
+Note: if your measurement name ends with a `*`, the extractor will look for any measures that match, but it won't wait for them beyond page load. If there is a specific measure that may be delayed, list is explicitly and list it only for targets where it's expected.
 
 ```js
 module.exports = {
@@ -138,16 +138,19 @@ module.exports = {
 
 ### Properties
 
-`d2l-beaker` supports extracting properties along with its measurements. There are a couple of built-in properties that can be extracted - specifically the `app-version` (from HTML data attribute), and `polymer` (version from JS).
-
-Need to extract properties (besides the built-in ones) to go with your data? The provider may be `async` if needed.
+`d2l-beaker` supports extracting properties along with its measurements. The following example shows how an `app-version` and a `polymer-version` property could be extracted. Note: the property provider may be `async` if needed.
 
 ```js
 module.exports = {
   "properties": [
-    "app-version",
-    "polymer",
-    {"key": "some-other-version", "provider": () => {return SomeOtherFramework.version;}}
+    {
+      "key": "app-version",
+      "provider": () => { return return document.documentElement.getAttribute('data-app-version'); }
+    },
+    {
+      "key": "polymer-version",
+      "provider": () => { return Polymer.version; }
+    }
   ]
 };
 ```
@@ -165,16 +168,14 @@ The extracted properties will be included in the JSON output.
   "timestamp":"2018-03-23 15:47:56.182",
   "properties":[
     {"name":"app-version","value":"10.8.1"},
-    {"name":"polymer","value":"2.5.0"},
-    {"name":"some-other-version","value":"some-value"}
+    {"name":"polymer-version","value":"2.5.0"}
   ],
   "measurements":[
-    {"name":"first-paint","value":940},
-    {"name":"first-contentful-paint","value":940}
+    {"name":"first-paint","entryType":"paint","startTime":0,"duration":940},
+    {"name":"first-contentful-paint","entryType":"paint","startTime":0,"duration":940}
   ]
 }
 ```
-
 
 ### Upload
 

@@ -8,53 +8,71 @@ const processor = {
 
 		const results = [];
 
-		const getMeasureNames = (measurements) => {
-			const names = [];
-			if (measurements.length > 0) {
-				for (const measureName in measurements[0]) {
-					if (measurements[0].hasOwnProperty(measureName)) {
-						names.push(measureName);
+		const getMeasurementsByName = (samples) => {
+
+			const result = samples.reduce((measurements, sample) => {
+				return sample.reduce((measurements, measurement) => {
+					const key = `${measurement.name}:${measurement.entryType}`;
+					if (!measurements[key]) {
+						measurements[key] = [];
 					}
-				}
-			}
-			return names;
+					measurements[key].push(measurement);
+					return measurements;
+				}, measurements);
+			}, {});
+
+			return result;
+
 		};
 
-		const getMeasurement = (name, measurements) => {
+		const calculateStdMean = (values) => {
 
-			measurements = measurements.map(measurement => measurement[name]);
-
-			const std = math.std(measurements);
-			const mean = math.mean(measurements);
+			const std = math.std(values);
+			const mean = math.mean(values);
 			const keep = [];
 
-			process.stdout.write(`Times for ${chalk.green(name)}: `);
-			for (let i = 0; i < measurements.length; i++) {
-				if (math.abs(measurements[i] - mean) > std * 2) {
-					process.stdout.write(`${chalk.gray(Math.round(measurements[i]) + 'ms')} `);
+			for (let i = 0; i < values.length; i++) {
+				if (math.abs(values[i] - mean) > std * 2) {
+					process.stdout.write(`${chalk.gray(Math.round(values[i]) + 'ms')} `);
 				} else {
-					process.stdout.write(`${Math.round(measurements[i])}ms `);
-					keep.push(measurements[i]);
+					process.stdout.write(`${Math.round(values[i])}ms `);
+					keep.push(values[i]);
 				}
 			}
 
 			const meanStd = math.mean(keep);
 
-			//results[name] = Math.round(meanStd);
-			results.push({name: name, value: Math.round(meanStd)});
+			process.stdout.write(`\n'std': ${Math.round(std)}ms; `);
+			process.stdout.write(`'mean': ${Math.round(mean)}ms; `);
+			process.stdout.write(`${chalk.green('mean(std)')}: ${Math.round(meanStd)}ms`);
 
-			process.stdout.write(`\n${chalk.green('std')}: ${Math.round(std)}ms; `);
-			process.stdout.write(`${chalk.green('mean')}: ${Math.round(mean)}ms; `);
-			process.stdout.write(`${chalk.green('mean(std)')}: ${Math.round(meanStd)}ms\n\n`);
+			return meanStd;
 
 		};
 
-		const measureNames = getMeasureNames(measurements);
-		for (let i = 0; i < measureNames.length; i++) {
-			getMeasurement(measureNames[i], measurements);
+		measurements = getMeasurementsByName(measurements);
+
+		for (const measurementName in measurements) {
+			if (measurements.hasOwnProperty(measurementName)) {
+
+				const result = {
+					name: measurements[measurementName][0].name,
+					entryType: measurements[measurementName][0].entryType
+				};
+
+				process.stdout.write(`\n${chalk.blue(measurementName)}`);
+				process.stdout.write('\nstartTime: ');
+				result.startTime = Math.round(calculateStdMean(measurements[measurementName].map(m => m.startTime)));
+				process.stdout.write('\nduration: ');
+				result.duration = Math.round(calculateStdMean(measurements[measurementName].map(m => m.duration)));
+
+				process.stdout.write('\n');
+
+				results.push(result);
+			}
 		}
 
-		process.stdout.write('\n');
+		process.stdout.write('\n\n');
 
 		return results;
 
