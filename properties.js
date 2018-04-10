@@ -1,15 +1,6 @@
 
 const login = require('./login.js');
 
-const builtinProviders = {
-	'app-version': () => {
-		return document.documentElement.getAttribute('data-app-version');
-	},
-	'polymer': () => {
-		return Polymer.version;
-	}
-};
-
 const getProperty = async(page, url, provider, config) => {
 	if (page.url() !== url) {
 		await page.goto(url, {waitUntil: ['networkidle2', 'load']});
@@ -30,10 +21,6 @@ const getProviders = (keys) => {
 			if (typeof keys[i] === 'object') {
 				if (keys[i].hasOwnProperty('key') && keys[i].hasOwnProperty('provider')) {
 					providers.push({key: keys[i].key, provider: keys[i].provider});
-				}
-			} else {
-				if (builtinProviders[keys[i]]) {
-					providers.push({key: keys[i], provider: builtinProviders[keys[i]]});
 				}
 			}
 		}
