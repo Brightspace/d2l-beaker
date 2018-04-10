@@ -31,6 +31,7 @@ const fileName = `${helpers.getTimestamp('-', '.')}.json`;
 const filePath = `${folderPath}/${fileName}`;
 
 (async() => {
+
 	process.stdout.write('\nLaunching browser... ');
 	const browser = await puppeteer.launch({headless: config.headless});
 	const page = await browser.newPage();

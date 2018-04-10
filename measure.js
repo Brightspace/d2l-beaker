@@ -5,30 +5,37 @@ const helpers = require('./helpers.js');
 
 const builtinProviders = {
 
-	'first-paint': () => {
-		return window.performance.getEntriesByName('first-paint')[0].startTime;
-	},
-	'first-contentful-paint': () => {
-		return window.performance.getEntriesByName('first-contentful-paint')[0].startTime;
-	},
 	'tti': async() => {
-		return await ttiPolyfill.getFirstConsistentlyInteractive();
+		const tti = await ttiPolyfill.getFirstConsistentlyInteractive();
+		return [{
+			name: 'tti',
+			entryType: 'measure',
+			startTime: 0,
+			duration: tti
+		}];
 	},
 
 	'generic-pattern': async(pattern) => {
 
 		pattern = pattern.substr(0, pattern.length - 1);
 
-		const entries = window.performance.getEntries({ 'entryType': 'measure'});
-		const result = {};
+		const entries = window.performance.getEntries();
+
+		const result = [];
 
 		for (let i = 0; i < entries.length; i++) {
 			if (entries[i].name.startsWith(pattern)) {
-				result[entries[i].name] = entries[i].duration;
+				result.push({
+					name: entries[i].name,
+					entryType: entries[i].entryType,
+					startTime: entries[i].startTime,
+					duration: entries[i].duration
+				});
 			}
 		}
 
 		return result;
+
 	},
 
 	'generic': async(key) => {
@@ -37,9 +44,18 @@ const builtinProviders = {
 			return null;
 		}
 
+		const mapEntry = (entry) => {
+			return {
+				name: entry.name,
+				entryType: entry.entryType,
+				startTime: entry.startTime,
+				duration: entry.duration
+			};
+		};
+
 		const entries = window.performance.getEntriesByName(key);
 		if (entries && entries.length > 0) {
-			return entries[0].duration;
+			return entries.map(mapEntry);
 		}
 
 		const entryPromise = new Promise(function(resolve) {
@@ -50,10 +66,10 @@ const builtinProviders = {
 			const observer = new PerformanceObserver((list) => {
 				const entries = list.getEntriesByName(key);
 				if (entries && entries.length > 0) {
-					resolve(entries[0].duration);
+					resolve(entries.map(mapEntry));
 				}
 			});
-			observer.observe({entryTypes: ['measure']});
+			observer.observe({entryTypes: ['measure', 'mark', 'paint']});
 		});
 
 		return entryPromise;
@@ -79,19 +95,15 @@ const getProviders = (keys) => {
 
 const getMeasurements = async(page, providers) => {
 
-	let measurements = {};
+	let measurements = [];
 
 	if (providers && providers.length > 0) {
 		for (let i = 0; i < providers.length; i++) {
-			const value = await page.evaluate(providers[i].provider, providers[i].key);
-			if (value === null) {
+			const more = await page.evaluate(providers[i].provider, providers[i].key);
+			if (more === null) {
 				continue;
 			}
-			if (typeof value === 'object') {
-				measurements = {...measurements, ...value};
-			} else {
-				measurements[providers[i].key] = value;
-			}
+			measurements = [...measurements, ...more];
 		}
 	}
 
