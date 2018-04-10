@@ -42,8 +42,8 @@ const processor = {
 
 			const meanStd = math.mean(keep);
 
-			process.stdout.write(`\n${chalk.green('std')}: ${Math.round(std)}ms; `);
-			process.stdout.write(`${chalk.green('mean')}: ${Math.round(mean)}ms; `);
+			process.stdout.write(`\n'std': ${Math.round(std)}ms; `);
+			process.stdout.write(`'mean': ${Math.round(mean)}ms; `);
 			process.stdout.write(`${chalk.green('mean(std)')}: ${Math.round(meanStd)}ms`);
 
 			return meanStd;
@@ -60,9 +60,10 @@ const processor = {
 					entryType: measurements[measurementName][0].entryType
 				};
 
-				process.stdout.write(`\nTimes for ${chalk.green(measurementName)}.startTime: `);
+				process.stdout.write(`\n${chalk.blue(measurementName)}`);
+				process.stdout.write(`\nstartTime: `);
 				result.startTime = Math.round(calculateStdMean(measurements[measurementName].map(m => m.startTime)));
-				process.stdout.write(`\nTimes for ${chalk.green(measurementName)}.duration: `);
+				process.stdout.write(`\nduration: `);
 				result.duration = Math.round(calculateStdMean(measurements[measurementName].map(m => m.duration)));
 
 				process.stdout.write('\n');
