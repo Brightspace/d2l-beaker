@@ -145,15 +145,11 @@ module.exports = {
   "properties": [
     {
       "key": "app-version",
-      "provider": () => {
-        return return document.documentElement.getAttribute('data-app-version');
-      }
+      "provider": () => { return return document.documentElement.getAttribute('data-app-version'); }
     },
     {
       "key": "polymer-version",
-      "provider": () => {
-        return Polymer.version;
-      }
+      "provider": () => { return Polymer.version; }
     }
   ]
 };
