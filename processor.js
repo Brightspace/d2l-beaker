@@ -61,9 +61,9 @@ const processor = {
 				};
 
 				process.stdout.write(`\n${chalk.blue(measurementName)}`);
-				process.stdout.write(`\nstartTime: `);
+				process.stdout.write('\nstartTime: ');
 				result.startTime = Math.round(calculateStdMean(measurements[measurementName].map(m => m.startTime)));
-				process.stdout.write(`\nduration: `);
+				process.stdout.write('\nduration: ');
 				result.duration = Math.round(calculateStdMean(measurements[measurementName].map(m => m.duration)));
 
 				process.stdout.write('\n');
