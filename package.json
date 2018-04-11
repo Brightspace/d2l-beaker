@@ -1,6 +1,6 @@
 {
   "name": "d2l-beaker",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A driver for Google Puppeteer to collect client-side performance metrics",
   "bin": {
     "measure": "./index.js"
