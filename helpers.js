@@ -5,13 +5,13 @@ const helper = {
 		dateDelim = dateDelim ? dateDelim : '-';
 		timeDelim = timeDelim ? timeDelim : ':';
 		const date = new Date();
-		const year = date.getFullYear();
-		const month = date.getMonth() + 1;
-		const day = date.getDate();
-		const hours = date.getHours();
-		const minutes = date.getMinutes();
-		const seconds = date.getSeconds();
-		const milliseconds = date.getMilliseconds();
+		const year = date.getUTCFullYear();
+		const month = date.getUTCMonth() + 1;
+		const day = date.getUTCDate();
+		const hours = date.getUTCHours();
+		const minutes = date.getUTCMinutes();
+		const seconds = date.getUTCSeconds();
+		const milliseconds = date.getUTCMilliseconds();
 		return year + dateDelim
 			+ (month < 10 ? '0' + month : month) + dateDelim
 			+ (day < 10 ? '0' + day : day) + ' '
