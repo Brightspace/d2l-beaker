@@ -48,10 +48,10 @@ const filePath = `${folderPath}/${fileName}`;
 			let result = await measure(page, caching, config.target.targets[i], config);
 
 			result = {...{
-				'application-key': config.applicationKey,
-				'target-site': config.target.site,
-				'target-url': config.target.targets[i].url,
-				'target-name': config.target.targets[i].name,
+				'applicationKey': config.applicationKey,
+				'targetSite': config.target.site,
+				'targetUrl': config.target.targets[i].url,
+				'targetName': config.target.targets[i].name,
 				'properties': await getProperties(page, config.target.site + config.target.targets[i].url, config.properties, config),
 				'browser': browserVersion
 			}, ...result};
